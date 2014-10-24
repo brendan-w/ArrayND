@@ -1,0 +1,31 @@
+<!doctype html>
+<!-- Written and Designed by Brendan Whitfield -->
+<html>
+	<head>
+		<!-- META -->
+		<meta charset='utf-8'/>
+		<title>Test</title>
+
+		<!-- JS -->
+		<script type="text/javascript" src='ArrayND.js'></script>
+		<script>
+
+			"use strict";
+
+			var a = new ArrayND(4, 4);
+			a.forEach(function(v, x, y, a) {
+				a[x][y] = 1 + x + (a.x * y);
+			});
+
+
+			console.log(a);
+			a.log();
+			var c = a.getCol(0);
+			c.reverse();
+			a.setCol(0, c);
+			a.log();
+		</script>
+	</head>
+	<body>
+	</body>
+ </html>
