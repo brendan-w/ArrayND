@@ -1,6 +1,6 @@
+
+//Multi-dimensional arrays for JavaScript
 //Written by Brendan Whitfield
-
-
 
 
 /*
@@ -12,10 +12,33 @@
 var ArrayND = function() {
 	"use strict";
 
+	var that = this;
+
 	this.default_value = 0;
 
-	var a = arguments; //for brevity, nothing more
-	if(a.length === 1 && a[0] instanceof ArrayND)
+
+	function build(root, d, current)
+	{
+		if(d === root.size.length - 1)
+		{
+			var size = root.size[d];
+			for(var i = 0; i < size; i++)
+			{
+				current[i] = root.default_value;
+			}
+		}
+		else if(d < root.size.length)
+		{
+			var size = root.size[d];
+			for(var i = 0; i < size; i++)
+			{
+				current[i] = []; //create the next level
+				build(root, d+1, current[i]) //fill the next level
+			}
+		}
+	}
+
+	if(arguments.length === 1 && arguments[0] instanceof ArrayND)
 	{
 		//copy constructor
 
@@ -23,14 +46,11 @@ var ArrayND = function() {
 	else
 	{
 		//normal n-dimensional constructor
-		this.dimensions = a.length;
-		
-		for(var d = 0; d < a.length; d++)
-		{
-			//record the size of this dimension
-			this["d" + d] = a[0];
-		}
+		this.size = Array.slice(arguments);
+		build(this, 0, this);
 	}
+
+
 };
 
 
