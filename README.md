@@ -1,9 +1,11 @@
 ArrayND
 =======
 
-Javascript library for multi-dimensional arrays.
+JavaScript library for multi-dimensional arrays.
 
 Please use wisely, memory adds up quickly.
+
+For special 2D functionality, see [Array2D](https://github.com/brendanwhitfield/Array2D)
 
 
 Constructors
