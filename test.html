@@ -13,12 +13,14 @@
 			"use strict";
 
 			var a = new ArrayND(12, 12, 12);
-			var b = new ArrayND(a);
 
 			a.fill(2);
-			a.set([0,0,0]);
 			console.log(a);
-			console.log(b);
+			var i = 0;
+			a.forEach(function(v, c, a) {
+				i++;
+			});
+			console.log(i);
 		</script>
 	</head>
 	<body>

@@ -24,14 +24,14 @@ var ArrayND = function() {
 	{
 		if(d === root.dimensions - 1)
 		{
-			for(var i = 0; i < root.end[d]; i++)
+			for(var i = 0; i <= root.end[d]; i++)
 			{
 				current[i] = root.default;
 			}
 		}
 		else if(d < root.dimensions)
 		{
-			for(var i = 0; i < root.end[d]; i++)
+			for(var i = 0; i <= root.end[d]; i++)
 			{
 				current[i] = {}; //create the next level
 				build(d+1, current[i]) //fill the next level
@@ -46,8 +46,8 @@ var ArrayND = function() {
 
 		//copy properties
 		this.dimensions = other.dimensions;
-		this.start      = Array.slice(other.start);
-		this.end        = Array.slice(other.end);
+		this.start      = Array.prototype.slice.call(other.start);
+		this.end        = Array.prototype.slice.call(other.end);
 		this.length     = other.length;
 
 		build(0, this);
@@ -61,14 +61,15 @@ var ArrayND = function() {
 	{
 		//normal n-dimensional constructor
 		this.dimensions = arguments.length;
+		this.size       = Array.prototype.slice.call(arguments);
+		this.length     = this.size.reduce(function(a,b) { return a*b; });
 		this.start      = [];
-		this.end        = Array.slice(arguments);
-		this.length     = this.end.reduce(function(a,b) { return a*b; });
+		this.end        = [];
 
 		for(var d = 0; d < this.dimensions; d++)
 		{
 			this.start.push(0);
-			this.end[d]--;
+			this.end.push(this.size[d] - 1);
 		}
 
 		build(0, this);
@@ -147,7 +148,7 @@ ArrayND.prototype.forRange = function(start, end, callback) {
 	{
 		if(d === root.dimensions - 1)
 		{
-			for(var i = start[d]; i < end[d]; i++)
+			for(var i = start[d]; i <= end[d]; i++)
 			{
 				coordinates[d] = i;
 				callback(current[i], coordinates, root); //reached a value
@@ -155,7 +156,7 @@ ArrayND.prototype.forRange = function(start, end, callback) {
 		}
 		else if(d < root.dimensions)
 		{
-			for(var i = start[d]; i < end[d]; i++)
+			for(var i = start[d]; i <= end[d]; i++)
 			{
 				coordinates[d] = i;
 				iterate(d+1, current[i]) //recurse to the next level
