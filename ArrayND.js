@@ -121,6 +121,7 @@ ArrayND.prototype.set =function(coordinate, value) {
 
 	var root = this;
 	var last = coordinate.length - 1;
+	value = !value ? this.default : value;
 
 	//[2,3,1]  --->  root[2][3][1]
 	for(var d = 0; d < last; d++)
@@ -170,7 +171,10 @@ ArrayND.prototype.forEach = function(callback) {
 };
 
 ArrayND.prototype.fillRange = function(start, end, value) {
+
 	var root = this;
+	value = !value ? this.default : value;
+
 	this.forRange(this.start, this.end, function(v, c, a) {
 		root.set(c, value);
 	});
