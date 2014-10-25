@@ -66,12 +66,13 @@ var ArrayND = function() {
 		this.length     = this.end.reduce(function(a,b) { return a*b; });
 
 		for(var d = 0; d < this.dimensions; d++)
+		{
 			this.start.push(0);
+			this.end[d]--;
+		}
 
 		build(0, this);
 	}
-
-
 };
 
 ArrayND.prototype.__validCoordinate__ = function(coordinate) {
@@ -89,7 +90,7 @@ ArrayND.prototype.__validCoordinate__ = function(coordinate) {
 	{
 		if(coordinate[d] < 0)
 			throw "ArrayND: Invalid coordinate. Index less than zero: [" + coordinate.join(", ") + "]";
-		if(coordinate[d] >= this.dimensions[d])
+		if(coordinate[d] > this.end[d])
 			throw "ArrayND: Invalid coordinate. Index greater than length: [" + coordinate.join(", ") + "]";
 	}
 };
@@ -127,8 +128,6 @@ ArrayND.prototype.set =function(coordinate, value) {
 
 	root[coordinate[last]] = value;
 };
-
-
 
 /*
 	start = [] coordinates
