@@ -33,9 +33,9 @@ All API functions operate in-place (on the existing array).
 
 All callback functions are of the format:
 
-	function(value, coord arrayND)
+	function(value, coord, arrayND)
 
-All coordinates are of the format:
+All coordinates are arrays of the format:
 
 	[x, y, z, w, etc...]
 
