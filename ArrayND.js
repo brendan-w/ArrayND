@@ -21,16 +21,14 @@ var ArrayND = function() {
 	{
 		if(d === root.size.length - 1)
 		{
-			var size = root.size[d];
-			for(var i = 0; i < size; i++)
+			for(var i = 0; i < root.size[d]; i++)
 			{
 				current[i] = root.default_value;
 			}
 		}
 		else if(d < root.size.length)
 		{
-			var size = root.size[d];
-			for(var i = 0; i < size; i++)
+			for(var i = 0; i < root.size[d]; i++)
 			{
 				current[i] = []; //create the next level
 				build(root, d+1, current[i]) //fill the next level
@@ -52,6 +50,37 @@ var ArrayND = function() {
 
 
 };
+
+
+ArrayND.prototype.forEach = function(callback) {
+	"use strict";
+
+	var that = this;
+	var coordinates = Array.slice(this.size);
+
+	function iterate(d, current)
+	{
+		if(d === that.size.length - 1)
+		{
+			for(var i = 0; i < that.size[d]; i++)
+			{
+				coordinates[d] = i;
+				callback(current[i], coordinates, that);
+			}
+		}
+		else if(d < that.size.length)
+		{
+			for(var i = 0; i < that.size[d]; i++)
+			{
+				coordinates[d] = i;
+				iterate(d+1, current[i]) //fill the next level
+			}
+		}
+	}
+
+	iterate(0, this);
+};
+
 
 
 
@@ -119,23 +148,6 @@ ArrayND.prototype.__assert__typeOf = function(sourceName, obj, type) {
 
 
 
-ArrayND.prototype.__build__ = function(nx, ny, def) {
-
-	this.x = nx;
-	this.y = ny;
-	this.default_value = def !== undefined ? def : this.default_value;
-
-	for(var x = 0; x < this.x; x++)
-	{
-		this[x] = {};
-		for(var y = 0; y < this.y; y++)
-		{
-			this[x][y] = this.default_value;
-		}
-	}
-};
-
-
 
 /*
  * API functions
@@ -144,19 +156,6 @@ ArrayND.prototype.__build__ = function(nx, ny, def) {
 /*
  * Iterators
  */
-
-ArrayND.prototype.forEach = function(callback) {
-	this.__assert__totalArgs("forEach", [1], arguments);
-	this.__assert__isFunction("forEach", callback);
-
-	for(var x = 0; x < this.x; x++)
-	{
-		for(var y = 0; y < this.y; y++)
-		{
-			callback(this[x][y], x, y, this);
-		}
-	}
-};
 
 ArrayND.prototype.forArea = function(x, y, w, h, callback) {
 	this.__assert__totalArgs("forArea", [5], arguments);
