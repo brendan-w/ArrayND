@@ -1,7 +1,7 @@
 ArrayND
 =======
 
-JavaScript library for multi-dimensional arrays.
+##### JavaScript library for multi-dimensional arrays.
 
 Please use wisely, memory adds up quickly.
 
