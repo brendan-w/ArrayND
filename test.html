@@ -14,11 +14,9 @@
 
 			var a = new ArrayND(4, 4, 2);
 
-
+			a.fill(2);
+			console.log(a.get([0,0,0]));
 			console.log(a);
-			a.forEach(function(v, c, a) {
-				console.log(c.join(" "));
-			});
 		</script>
 	</head>
 	<body>

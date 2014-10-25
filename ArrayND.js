@@ -86,19 +86,49 @@ ArrayND.prototype.__isFunction__ = function(func) {
 		throw "ArrayND: Invalid callback type: " + (typeof func);
 };
 
+
+
+
+ArrayND.prototype.get = function(coordinate) {
+	this.__validCoordinate__(coordinate);
+
+	var root = this;
+	var last = coordinate.length - 1;
+
+	//[2,3,1]  --->  root[2][3][1]
+	for(var d = 0; d < last; d++)
+		root = root[coordinate[d]];
+
+	return root[coordinate[last]];
+};
+
+ArrayND.prototype.set =function(coordinate, value) {
+	this.__validCoordinate__(coordinate);
+	
+	var root = this;
+	var last = coordinate.length - 1;
+
+	//[2,3,1]  --->  root[2][3][1]
+	for(var d = 0; d < last; d++)
+		root = root[coordinate[d]];
+
+	root[coordinate[last]] = value;
+};
+
+
+
 /*
 	start = [] coordinates
 	end = [] coordinates
 	callback = function(value, coordinates, ArrayND)
 */
 ArrayND.prototype.forRange = function(start, end, callback) {
-
-	var root = this;
-	var coordinates = [];
-
 	this.__validCoordinate__(start);
 	this.__validCoordinate__(end);
 	this.__isFunction__(callback);
+
+	var root = this;
+	var coordinates = [];
 
 	function iterate(d, current)
 	{
@@ -124,6 +154,18 @@ ArrayND.prototype.forRange = function(start, end, callback) {
 };
 
 ArrayND.prototype.forEach = function(callback) {
-	"use strict";
 	this.forRange(this.start, this.end, callback);
+};
+
+
+
+ArrayND.prototype.fillRange = function(start, end, value) {
+	var root = this;
+	this.forRange(this.start, this.end, function(v, c, a) {
+		root.set(c, value);
+	});
+};
+
+ArrayND.prototype.fill = function(value) {
+	this.fillRange(this.start, this.end, value);
 };
