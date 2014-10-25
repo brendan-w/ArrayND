@@ -76,36 +76,36 @@ var ArrayND = function() {
 	}
 };
 
-ArrayND.prototype.__validCoordinate__ = function(coordinate) {
-	if(!(coordinate instanceof Array))
-	{
-		throw "ArrayND: Invalid coordinate type: " + (typeof coordinate);
-	}
+ArrayND.prototype.__assert__ = {
 
-	if(coordinate.length !== this.dimensions)
-	{
-		throw "ArrayND: Invalid number of dimensions in coordinate: [" + coordinate.join(", ") + "]";
-	}
+	validCoordinate : function(coordinate) {
+		if(!(coordinate instanceof Array))
+		{
+			throw "ArrayND: Invalid coordinate type: " + (typeof coordinate);
+		}
 
-	for(var d = 0; d < coordinate.length; d++)
-	{
-		if(coordinate[d] < 0)
-			throw "ArrayND: Invalid coordinate. Index less than zero: [" + coordinate.join(", ") + "]";
-		if(coordinate[d] > this.end[d])
-			throw "ArrayND: Invalid coordinate. Index greater than length: [" + coordinate.join(", ") + "]";
-	}
+		if(coordinate.length !== this.dimensions)
+		{
+			throw "ArrayND: Invalid number of dimensions in coordinate: [" + coordinate.join(", ") + "]";
+		}
+
+		for(var d = 0; d < coordinate.length; d++)
+		{
+			if(coordinate[d] < 0)
+				throw "ArrayND: Invalid coordinate. Index less than zero: [" + coordinate.join(", ") + "]";
+			if(coordinate[d] > this.end[d])
+				throw "ArrayND: Invalid coordinate. Index greater than length: [" + coordinate.join(", ") + "]";
+		}
+	},
+
+	isFunction : function(func) {
+		if(!(func instanceof Function))
+			throw "ArrayND: Invalid callback type: " + (typeof func);
+	},
 };
-
-ArrayND.prototype.__isFunction__ = function(func) {
-	if(!(func instanceof Function))
-		throw "ArrayND: Invalid callback type: " + (typeof func);
-};
-
-
-
 
 ArrayND.prototype.get = function(coordinate) {
-	this.__validCoordinate__(coordinate);
+	this.__assert__.validCoordinate.call(this, coordinate);
 
 	var root = this;
 	var last = coordinate.length - 1;
@@ -118,7 +118,7 @@ ArrayND.prototype.get = function(coordinate) {
 };
 
 ArrayND.prototype.set =function(coordinate, value) {
-	this.__validCoordinate__(coordinate);
+	this.__assert__.validCoordinate.call(this, coordinate);
 
 	var root = this;
 	var last = coordinate.length - 1;
@@ -137,9 +137,9 @@ ArrayND.prototype.set =function(coordinate, value) {
 	callback = function(value, coordinates, ArrayND)
 */
 ArrayND.prototype.forRange = function(start, end, callback) {
-	this.__validCoordinate__(start);
-	this.__validCoordinate__(end);
-	this.__isFunction__(callback);
+	this.__assert__.validCoordinate.call(this, start);
+	this.__assert__.validCoordinate.call(this, end);
+	this.__assert__.isFunction.call(this, callback);
 
 	var root = this;
 	var coordinates = [];
